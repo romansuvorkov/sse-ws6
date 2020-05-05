@@ -2,8 +2,8 @@ import API from './API';
 
 export default class InstancesController {
   constructor() {
-    this.api = new API('http://localhost:7070/instances');
-    this.url = 'ws://localhost:7070/ws';
+    this.api = new API('https://cloud-dashboard-sse-ws5.herokuapp.com/instances');
+    this.url = 'wss://cloud-dashboard-sse-ws5.herokuapp.com:7070/ws';
   }
 
   init() {
