@@ -9,7 +9,7 @@ export default class InstancesController {
   init() {
     this.ws = new WebSocket(this.url);
     this.instancesList = document.querySelector('.instances_list');
-    this.workLog = document.querySelector('.worklog_list');    
+    this.workLog = document.querySelector('.worklog_list');
 
     this.ws.addEventListener('message', (event) => {
       this.drawLog(event);
@@ -19,34 +19,32 @@ export default class InstancesController {
     this.createNewInstance();
 
     document.addEventListener('click', (event) => {
-        if (event.target.classList.contains('create_link')) {
-            console.log('work');
-            event.preventDefault();
-            this.api.add();
-            while (this.instancesList.firstChild) {
-                console.log('removeChild1');
-                this.instancesList.removeChild(this.instancesList.firstChild);
-            }
-            this.clearInstanceList();
-            this.createNewInstance();
+      if (event.target.classList.contains('create_link')) {
+        event.preventDefault();
+        this.api.add();
+        while (this.instancesList.firstChild) {
+          this.instancesList.removeChild(this.instancesList.firstChild);
         }
+        this.clearInstanceList();
+        this.createNewInstance();
+      }
 
-        if (event.target.classList.contains('actions_btn')) {
-            let elementId = event.target.closest('.instance').dataset.id;
-            if (event.target.classList.contains('delete')) {
-                this.api.delete(elementId);
-            } else {
-                this.api.patch(elementId);
-            }
+      if (event.target.classList.contains('actions_btn')) {
+        const elementId = event.target.closest('.instance').dataset.id;
+        if (event.target.classList.contains('delete')) {
+          this.api.delete(elementId);
+        } else {
+          this.api.patch(elementId);
         }
+      }
     });
   }
 
-clearInstanceList() {
+  clearInstanceList() {
     while (this.instancesList.firstChild) {
-        this.instancesList.removeChild(this.instancesList.firstChild);
+      this.instancesList.removeChild(this.instancesList.firstChild);
     }
-}
+  }
 
   async createNewInstance() {
     const serverResponse = await this.api.load();
@@ -56,10 +54,10 @@ clearInstanceList() {
       let actionBtn = null;
       if (item.state === 'stopped') {
         statusText = 'Stopped';
-        actionBtn = 'start'
+        actionBtn = 'start';
       } else {
         statusText = 'Running';
-        actionBtn = 'pause'
+        actionBtn = 'pause';
       }
       const instance = document.createElement('div');
       instance.classList.add('instance');
@@ -83,7 +81,6 @@ clearInstanceList() {
   }
 
   drawLog(data) {
-    console.log('drawMessages');
     const { type } = JSON.parse(data.data);
 
     if (type === 'server log') {
@@ -126,11 +123,5 @@ clearInstanceList() {
       this.workLog.appendChild(newMessage);
       this.workLog.scrollTo(0, newMessage.offsetTop);
     }
-
   }
-
-
-
-
-
 }
